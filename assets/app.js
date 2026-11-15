@@ -1,7 +1,7 @@
 
 (async function(){
 const RG=['23区','東京市町村','神奈川','埼玉','千葉'];
-const D=(await fetch('/assets/towns.json?v=202611152107').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
+const D=(await fetch('/assets/towns.json?v=202611152114').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
 const $=id=>document.getElementById(id);const TN=['金運','縁結び・恋愛','仕事・勝運','学業','子宝・安産','健康・厄除'];
 // 地図（canvas）
 const cv=$('map');if(cv){const ctx=cv.getContext('2d'),tip=$('tip');const W=cv.width,H=cv.height,pad=10;const la=D.map(d=>d.lat),lo=D.map(d=>d.lng);const la0=Math.min(...la),la1=Math.max(...la),lo0=Math.min(...lo),lo1=Math.max(...lo);const k=Math.cos(35.7*Math.PI/180);const s=Math.min((W-2*pad)/((lo1-lo0)*k),(H-2*pad)/(la1-la0));const ox=(W-(lo1-lo0)*k*s)/2,oy=(H-(la1-la0)*s)/2;
