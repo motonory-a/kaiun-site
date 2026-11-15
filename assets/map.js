@@ -1,7 +1,7 @@
 (async function(){
 const el=document.getElementById('kmap');if(!el||!window.L)return;
 const RG=['23区','東京市町村','神奈川','埼玉','千葉'];const TN=['金運','縁結び・恋愛','仕事・勝運','学業','子宝・安産','健康・厄除'];
-const D=(await fetch('/assets/towns.json?v=202611152105').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
+const D=(await fetch('/assets/towns.json?v=202611152107').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
 const map=L.map(el,{preferCanvas:true,zoomControl:true,attributionControl:true,minZoom:8,maxZoom:17}).setView([35.68,139.75],10);
 L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル</a>'}).addTo(map);
 const rend=L.canvas({padding:0.3});
@@ -15,8 +15,8 @@ function draw(){layer.clearLayers();const z=map.getZoom();const base=z>=15?8:z>=
   if(mode==='score'){if(z<=11&&d.score<P80[d.rg])continue;if(z===12&&d.score<P50[d.rg])continue;}else if(z<=11&&v<0.6)continue;
   if(z>=12&&!bnd.contains([d.lat,d.lng]))continue;
   const m=L.circleMarker([d.lat,d.lng],{renderer:rend,radius:base*(v>=0.66?1.4:v>=0.4?1.15:1),stroke:z>=13,color:'#fff',weight:1,fillColor:col(v),fillOpacity:v>=0.4?0.88:0.55});m.d=d;m.on('click',()=>openTown(d,m));layer.addLayer(m);
-  if(z>=14&&v>=0.5)lab.push(m);}
- lab.slice(-25).forEach(m=>m.bindTooltip(`${esc(m.d.town)} ${m.d.score}点`,{permanent:true,direction:'top',className:'tl',offset:[0,-4]}).openTooltip());
+  if(z>=14&&v>=0.6)lab.push(m);}
+ lab.slice(-12).forEach(m=>m.bindTooltip(`${esc(m.d.town)} ${m.d.score}点`,{permanent:true,direction:'top',className:'tl',offset:[0,-4]}).openTooltip());
  const n=document.getElementById('knote');if(n)n.textContent=z<=12?'いまは点数の高い町だけ表示中。拡大するとすべての町が出ます':'すべての町を表示中';}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function openTown(d,m){const tl=TN.map((t,i)=>[t,d.ty[i]]).filter(x=>x[1]>=2).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([t,v])=>`<span class=luck>${t}${'★'.repeat(v)}</span>`).join('');
