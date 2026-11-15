@@ -1,7 +1,7 @@
 (async function(){
 const el=document.getElementById('kmap');if(!el||!window.L)return;
 const RG=['23区','東京市町村','神奈川','埼玉','千葉'];const TN=['金運','縁結び・恋愛','仕事・勝運','学業','子宝・安産','健康・厄除'];
-const D=(await fetch('/assets/towns.json?v=202611152118').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
+const D=(await fetch('/assets/towns.json?v=202611152135').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
 const map=L.map(el,{preferCanvas:true,zoomControl:false,minZoom:8,maxZoom:18}).setView([35.69,139.74],13);
 L.control.zoom({position:'bottomright'}).addTo(map);
 L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル</a>'}).addTo(map);
