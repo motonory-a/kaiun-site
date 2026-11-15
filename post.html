@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>体験談を投稿する｜開運物件サイト（仮）</title><meta name="description" content="住んで運が開けた家・お部屋の体験談を募集しています。">
+<link rel="canonical" href="https://kaiun.nigihayahi03.com/post.html"><link rel="stylesheet" href="/assets/style.css?v=202611152033">
+<meta property="og:title" content="体験談を投稿する｜開運物件サイト（仮）"><meta property="og:description" content="住んで運が開けた家・お部屋の体験談を募集しています。"><meta property="og:type" content="website">
+<!-- Google AdSense: 審査通過後にここへ広告コードを入れる -->
+</head><body>
+<div class="top"><div class="in"><a class="logo" href="/">⛩ 開運物件サイト（仮）</a><nav class="nav"><a href="/ranking.html">ランキング</a><a href="/post.html">体験談を投稿</a><a href="/about.html">このサイトについて</a></nav></div></div>
+<div class="wrap"><div class=crumb><a href="/">トップ</a> ＞ 体験談を投稿</div><h1>住んで良いことがあった体験談を募集しています</h1>
+<p class=lead>今まで住んだ家・お部屋で「ここに住んでから運が開けた」という体験を教えてください。いただいた体験談は運営で確認してから、個人や物件が特定されない形で掲載します。</p>
+<form class=box method=post action="/post.php">
+<label>ニックネーム <span class=hint>（掲載時に表示されます）</span></label><input name=nickname maxlength=30 required>
+<label>住んでいた場所 <span class=hint>（都県・区市・町名まで。建物名は任意、部屋番号は書かないでください）</span></label><input name=area id=area maxlength=80 placeholder="例：東京都新宿区神楽坂四丁目" required>
+<label>建物名 <span class=hint>（任意・非公開でも可）</span></label><input name=building maxlength=60><div class=checks><label><input type=checkbox name=building_public value=1> 建物名を掲載してもよい</label></div>
+<label>住んでいた時期</label><div style="display:flex;gap:8px"><input name=from_year type=number min=1950 max=2030 placeholder="入居した年" required><input name=to_year type=number min=1950 max=2030 placeholder="退去した年（住んでいる場合は空欄）"></div>
+<label>住まいの種類</label><select name=kind><option>賃貸マンション・アパート</option><option>分譲マンション</option><option>一戸建て</option><option>店舗・事務所</option><option>その他</option></select>
+<label>良くなったこと <span class=hint>（いくつでも）</span></label><div class=checks>
+<label><input type=checkbox name=luck[] value=金運>金運</label><label><input type=checkbox name=luck[] value=仕事>仕事・昇進</label><label><input type=checkbox name=luck[] value=商売>商売繁盛</label><label><input type=checkbox name=luck[] value=恋愛>恋愛・結婚</label><label><input type=checkbox name=luck[] value=子宝>子宝・安産</label><label><input type=checkbox name=luck[] value=健康>健康</label><label><input type=checkbox name=luck[] value=人間関係>人間関係</label><label><input type=checkbox name=luck[] value=学業>学業・合格</label><label><input type=checkbox name=luck[] value=その他>その他</label></div>
+<label>いつ頃、どんなふうに変わりましたか <span class=hint>（エピソードを自由にどうぞ）</span></label><textarea name=story rows=6 maxlength=2000 required placeholder="例：引っ越して半年で昇進。近所の神社に毎朝お参りするようになってから…"></textarea>
+<label>間取り・玄関の向きなど <span class=hint>（任意）</span></label><input name=layout maxlength=80 placeholder="例：1LDK・玄関は南東">
+<label>メールアドレス <span class=hint>（任意・非公開。内容の確認でご連絡することがあります）</span></label><input name=email type=email maxlength=100>
+<div style="position:absolute;left:-9999px"><input name=website tabindex=-1 autocomplete=off></div>
+<div class=checks style="margin-top:14px"><label><input type=checkbox name=agree value=1 required> <a href="/terms.html">利用規約</a>と<a href="/privacy.html">プライバシーポリシー</a>に同意し、内容が自分の体験であることを確認しました</label></div>
+<p><button class=btn type=submit>送信する</button></p></form>
+<script>const a=new URLSearchParams(location.search).get('area');if(a)document.getElementById('area').value=a;</script>
+<footer><p>※ 開運スコアは、土地にそろっている要素（神社・地名・富士山とのご縁・治安など）を数えたものです。住んだ人の運気を約束するものではありません。物件の購入・賃貸の判断は、ご自身で現地や重要事項説明をご確認ください。</p><p>データ出典：神社・寺・公園・池や川の位置 © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>（ODbL）／神社・寺の位置（23区以外） <a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院ベクトルタイル</a>／町丁目の位置 <a href="https://github.com/geolonia/japanese-addresses">Geolonia 住所データ</a>（CC BY 4.0）／安心度 <a href="https://www.keishicho.metro.tokyo.lg.jp/about_mpd/jokyo_tokei/jokyo/ninchikensu.html">警視庁 区市町村の町丁別、罪種別及び手口別認知件数（令和3〜7年）</a>（CC BY）／湧水 <a href="https://www.env.go.jp/water/yusui/result/sub2/tokyo.html">環境省 湧水保全ポータルサイト</a>／上場企業 <a href="https://disclosure2dl.edinet-fsa.go.jp/">金融庁 EDINET</a>／3県の安心度 <a href="https://www.police.pref.kanagawa.jp/tokei/hanzai_tokei/mesd0145.html">神奈川県警察</a>・<a href="https://www.police.pref.saitama.lg.jp/c0011/kurashi/0pendata2019/opendata2024.html">埼玉県警察</a>・<a href="https://www.police.pref.chiba.jp/seisoka/safe-life_publicspace-statistics_00002.html">千葉県警察</a> 犯罪オープンデータ／富士見百景 <a href="https://www.ktr.mlit.go.jp/chiiki/fujimi0053.html">国土交通省 関東地方整備局</a>／宝くじ高額当せん売り場 福井新聞ONLINE（みずほ銀行などの発表に基づく）、宝くじチャンスセンター</p>
+<p><a href="/about.html">このサイトについて</a>｜<a href="/terms.html">利用規約</a>｜<a href="/privacy.html">プライバシーポリシー</a>｜<a href="/contact.html">お問い合わせ・掲載協賛</a></p><p>運営：リュウライド株式会社</p></footer></div></body></html>
