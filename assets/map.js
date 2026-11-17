@@ -2,7 +2,7 @@
 const el=document.getElementById('kmap');if(!el||!window.L)return;
 const RG=["23区", "東京市町村", "神奈川", "埼玉", "千葉", "大阪", "京都", "兵庫", "愛知", "福岡"],PF=["東京都", "東京都", "神奈川県", "埼玉県", "千葉県", "大阪府", "京都府", "兵庫県", "愛知県", "福岡県"],RN=[3140, 2145, 4862, 5340, 5743, 8615, 7466, 8983, 14560, 6191],PCT=(r,g)=>Math.max(1,Math.ceil(r*100/RN[g])),TL=p=>p<=1?'最上位':p<=10?'上位':p<=30?'中の上':p<=70?'中堅':'ひかえめ';const TN=['金運','縁結び・恋愛','仕事・勝運','学業','子宝・安産','健康・厄除'];
 const BB=[[35.541, 139.567, 35.817, 139.916], [35.504, 139.0, 35.858, 139.593], [35.133, 139.005, 35.652, 139.776], [35.755, 138.785, 36.281, 139.894], [34.909, 139.759, 36.099, 140.864], [34.291, 135.106, 35.036, 135.74], [34.711, 134.865, 35.763, 136.024], [34.168, 134.267, 35.662, 135.459], [34.583, 136.675, 35.408, 137.782], [33.004, 130.036, 33.993, 131.181]];const D=[];const LD={};
-const loadRg=i=>LD[i]||(LD[i]=fetch('/assets/towns-'+i+'.json?v=202611171455').then(r=>r.json()).then(a=>{a.forEach(r=>D.push({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}))}));
+const loadRg=i=>LD[i]||(LD[i]=fetch('/assets/towns-'+i+'.json?v=202611171511').then(r=>r.json()).then(a=>{a.forEach(r=>D.push({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}))}));
 const need=b=>Promise.all(BB.map((x,i)=>(x[0]<=b.getNorth()&&x[2]>=b.getSouth()&&x[1]<=b.getEast()&&x[3]>=b.getWest())?loadRg(i):null));
 const loadAll=()=>Promise.all(BB.map((x,i)=>loadRg(i)));
 const map=L.map(el,{preferCanvas:true,zoomControl:false,minZoom:8,maxZoom:18}).setView([35.69,139.74],13);
