@@ -1,7 +1,7 @@
 
 (async function(){
-const RG=['23区','東京市町村','神奈川','埼玉','千葉'];
-const D=(await fetch('/assets/towns.json?v=202611162155').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
+const RG=["23区", "東京市町村", "神奈川", "埼玉", "千葉"],RN=[3140, 2145, 4862, 5340, 5743],PCT=(r,g)=>Math.max(1,Math.ceil(r*100/RN[g])),TL=p=>p<=1?'最上位':p<=10?'上位':p<=30?'中の上':p<=70?'中堅':'ひかえめ';
+const D=(await fetch('/assets/towns.json?v=202611170949').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
 const $=id=>document.getElementById(id);const TN=['金運','縁結び・恋愛','仕事・勝運','学業','子宝・安産','健康・厄除'];
 // 地図（canvas）
 const cv=$('map');if(cv){const ctx=cv.getContext('2d'),tip=$('tip');const W=cv.width,H=cv.height,pad=10;const la=D.map(d=>d.lat),lo=D.map(d=>d.lng);const la0=Math.min(...la),la1=Math.max(...la),lo0=Math.min(...lo),lo1=Math.max(...lo);const k=Math.cos(35.7*Math.PI/180);const s=Math.min((W-2*pad)/((lo1-lo0)*k),(H-2*pad)/(la1-la0));const ox=(W-(lo1-lo0)*k*s)/2,oy=(H-(la1-la0)*s)/2;
@@ -18,7 +18,7 @@ function wards(){if(!wd)return;wd.length=1;const m=new Map();D.filter(d=>!rs||rs
 wards();
 function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;}
 function render(){let a=D.filter(d=>(!rs||rs.value===''||d.rg==rs.value)&&(!wd||!wd.value||d.ward===wd.value)&&(!q.value||(d.ward+d.town).includes(q.value.trim())));const v=so.value;if(/^t\d$/.test(v)){const k=+v[1];a=[...a].sort((x,y)=>y.ty[k]-x.ty[k]||y.score-x.score);}list.textContent='';
-a.slice(0,shown).forEach(d=>{const c=el('a','card');c.href=d.url;const r=el('div','row');const rk=el('span','rank',d.rank+'位');rk.append(el('small',null,RG[d.rg]));const n=el('span','name',d.town);n.prepend(el('small',null,d.ward));const sc=el('span','score',String(d.score));sc.append(el('small',null,' 点'));r.append(rk,n,sc);c.append(r);const b=el('div','bar'),i=el('i');i.style.width=d.score+'%';b.append(i);c.append(b);const bd=el('div','badges');TN.map((t,j)=>[t,d.ty[j]]).filter(x=>x[1]>=2).sort((x,y)=>y[1]-x[1]).slice(0,3).forEach(([t,v])=>bd.append(el('span','luck',t+'★'.repeat(v))));c.append(bd);list.append(c);});
+a.slice(0,shown).forEach(d=>{const c=el('a','card');c.href=d.url;const r=el('div','row');const rk=el('span','rank',d.rank+'位');rk.append(el('small',null,RG[d.rg]+'・上位'+PCT(d.rank,d.rg)+'%'));const n=el('span','name',d.town);n.prepend(el('small',null,d.ward));const sc=el('span','score',String(d.score));sc.append(el('small',null,' 点'));r.append(rk,n,sc);c.append(r);const b=el('div','bar'),i=el('i');i.style.width=d.score+'%';b.append(i);c.append(b);const bd=el('div','badges');TN.map((t,j)=>[t,d.ty[j]]).filter(x=>x[1]>=2).sort((x,y)=>y[1]-x[1]).slice(0,3).forEach(([t,v])=>bd.append(el('span','luck',t+'★'.repeat(v))));c.append(bd);list.append(c);});
 $('more').style.display=a.length>shown?'block':'none';$('count').textContent=a.length.toLocaleString()+'件';if(!a.length)list.append(el('p','hint','条件に合う町が見つかりませんでした。町名の一部（例：「本町」）で探してみてください。'));}
 if(rs)rs.onchange=()=>{wards();shown=30;render();};
 const hs=location.hash.match(/^#(t[0-5])$/);if(hs){so.value=hs[1];}

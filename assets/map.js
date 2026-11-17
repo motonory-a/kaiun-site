@@ -1,7 +1,7 @@
 (async function(){
 const el=document.getElementById('kmap');if(!el||!window.L)return;
-const RG=['23区','東京市町村','神奈川','埼玉','千葉'];const TN=['金運','縁結び・恋愛','仕事・勝運','学業','子宝・安産','健康・厄除'];
-const D=(await fetch('/assets/towns.json?v=202611162155').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
+const RG=["23区", "東京市町村", "神奈川", "埼玉", "千葉"],RN=[3140, 2145, 4862, 5340, 5743],PCT=(r,g)=>Math.max(1,Math.ceil(r*100/RN[g])),TL=p=>p<=1?'最上位':p<=10?'上位':p<=30?'中の上':p<=70?'中堅':'ひかえめ';const TN=['金運','縁結び・恋愛','仕事・勝運','学業','子宝・安産','健康・厄除'];
+const D=(await fetch('/assets/towns.json?v=202611170949').then(r=>r.json())).map(r=>({ward:r[0],town:r[1],lat:r[2],lng:r[3],score:r[4],url:r[5],ty:r[6],rank:r[7],rg:r[8]}));
 const map=L.map(el,{preferCanvas:true,zoomControl:false,minZoom:8,maxZoom:18}).setView([35.69,139.74],13);
 L.control.zoom({position:'bottomright'}).addTo(map);
 L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png',{maxZoom:18,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html" target="_blank" rel="noopener">地理院タイル</a>'}).addTo(map);
@@ -23,7 +23,7 @@ function draw(){layer.clearLayers();const z=map.getZoom();const bnd=map.getBound
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 async function openTown(d,m){const tl=TN.map((t,i)=>[t,d.ty[i]]).filter(x=>x[1]>=2).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([t,v])=>`<span class=luck>${t}${'★'.repeat(v)}</span>`).join('');
  const pref=d.rg<=1?'東京都':['','','神奈川県','埼玉県','千葉県'][d.rg];
- const head=`<div class=pp><div class=pp-t>${esc(pref+d.ward+d.town)}</div><table class=pp-tb><tr><th>開運スコア</th><td><b>${d.score}</b>点（${RG[d.rg]}で${d.rank}位）</td></tr></table>`;
+ const head=`<div class=pp><div class=pp-t>${esc(pref+d.ward+d.town)}</div><table class=pp-tb><tr><th>開運スコア</th><td><b>${d.score}</b>点</td></tr><tr><th>順位</th><td>${RG[d.rg]}で${d.rank}位／${RN[d.rg].toLocaleString()}町<br>上位${PCT(d.rank,d.rg)}%（<b>${TL(PCT(d.rank,d.rg))}</b>）</td></tr></table>`;
  const foot=`<div class=pp-l><a href="${d.url}">この町の開運スコアをくわしく見る</a><a href="/post.html?area=${encodeURIComponent(pref+d.ward+d.town)}">この町の体験談を投稿する</a></div></div>`;
  const pop=L.popup({maxWidth:300,minWidth:240}).setLatLng(m.getLatLng()).setContent(head+`<div class=pp-h>開運の理由</div><div class=badges>${tl}<span>読み込み中…</span></div>`+foot).openOn(map);
  try{const h=await (await fetch(d.url)).text();const doc=new DOMParser().parseFromString(h,'text/html');const b=doc.querySelector('.badges');pop.setContent(head+`<div class=pp-h>開運の理由</div><div class=badges>${b?b.innerHTML:tl}</div>`+foot);}catch(e){}}
