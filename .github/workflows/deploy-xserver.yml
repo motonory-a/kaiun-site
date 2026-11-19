@@ -1,0 +1,61 @@
+# GitHubに更新を押すと、エックスサーバー(kaiun.nigihayahi03.com)へ自動で反映する仕組み
+# 必要な設定(GitHubのSettings > Secrets and variables > Actions に登録):
+#   XSERVER_HOST    … サーバー名(例: sv12345.xserver.jp)
+#   XSERVER_USER    … サーバーID
+#   XSERVER_SSH_KEY … エックスサーバーで作ったSSHの秘密鍵(中身をそのまま貼る)
+#   XSERVER_DIR     … 公開フォルダ(例: nigihayahi03.com/public_html/kaiun)
+name: エックスサーバーへ反映
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-xserver
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: 設定がそろっているか確認
+        id: check
+        env:
+          H: ${{ secrets.XSERVER_HOST }}
+          U: ${{ secrets.XSERVER_USER }}
+          K: ${{ secrets.XSERVER_SSH_KEY }}
+          D: ${{ secrets.XSERVER_DIR }}
+        run: |
+          if [ -z "$H" ] || [ -z "$U" ] || [ -z "$K" ] || [ -z "$D" ]; then
+            echo "設定(Secrets)がまだそろっていないので、今回は反映しません。"
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: ファイルを取り出す
+        if: steps.check.outputs.ready == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: エックスサーバーへ送る(変わったファイルだけ)
+        if: steps.check.outputs.ready == 'true'
+        env:
+          H: ${{ secrets.XSERVER_HOST }}
+          U: ${{ secrets.XSERVER_USER }}
+          K: ${{ secrets.XSERVER_SSH_KEY }}
+          D: ${{ secrets.XSERVER_DIR }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$K" > ~/.ssh/xserver
+          chmod 600 ~/.ssh/xserver
+          ssh-keyscan -p 10022 "$H" >> ~/.ssh/known_hosts 2>/dev/null
+          rsync -rlz --checksum --info=stats2 \
+            --exclude='.git/' --exclude='.github/' \
+            --exclude='CLAUDE.md' --exclude='README.md' \
+            -e "ssh -p 10022 -i ~/.ssh/xserver" \
+            ./ "$U@$H:$D/"
+          rm -f ~/.ssh/xserver
