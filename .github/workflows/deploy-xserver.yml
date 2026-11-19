@@ -1,10 +1,6 @@
 # GitHubに更新を押すと、エックスサーバー(kaiun.nigihayahi03.com)へ自動で反映する仕組み
-# 必要な設定(GitHubのSettings > Secrets and variables > Actions に登録):
-#   XSERVER_HOST    … サーバー名(例: sv12345.xserver.jp)
-#   XSERVER_USER    … サーバーID
-#   XSERVER_SSH_KEY … エックスサーバーで作ったSSHの秘密鍵(中身をそのまま貼る)
-#   XSERVER_DIR     … 公開フォルダ(例: nigihayahi03.com/public_html/kaiun)
-#   XSERVER_SSH_PASSPHRASE … 鍵を作るときに決めたパスフレーズ
+# 必要な設定は1つだけ(GitHubの Settings > Secrets and variables > Actions):
+#   XSERVER_SSH_KEY … エックスサーバーで作ったSSHの秘密鍵(ファイルの中身をそのまま貼る)
 name: エックスサーバーへ反映
 
 on:
@@ -16,6 +12,11 @@ concurrency:
   group: deploy-xserver
   cancel-in-progress: false
 
+env:
+  XSERVER_HOST: sv12649.xserver.jp
+  XSERVER_USER: nigihayahi03
+  XSERVER_DIR: nigihayahi03.com/public_html/kaiun
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -24,13 +25,10 @@ jobs:
       - name: 設定がそろっているか確認
         id: check
         env:
-          H: ${{ secrets.XSERVER_HOST }}
-          U: ${{ secrets.XSERVER_USER }}
           K: ${{ secrets.XSERVER_SSH_KEY }}
-          D: ${{ secrets.XSERVER_DIR }}
         run: |
-          if [ -z "$H" ] || [ -z "$U" ] || [ -z "$K" ] || [ -z "$D" ]; then
-            echo "設定(Secrets)がまだそろっていないので、今回は反映しません。"
+          if [ -z "$K" ]; then
+            echo "秘密鍵(XSERVER_SSH_KEY)がまだ登録されていないので、今回は反映しません。"
             echo "ready=false" >> "$GITHUB_OUTPUT"
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
@@ -42,25 +40,35 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: エックスサーバーへ送る(変わったファイルだけ)
+      - name: SSHの準備
         if: steps.check.outputs.ready == 'true'
         env:
-          H: ${{ secrets.XSERVER_HOST }}
-          U: ${{ secrets.XSERVER_USER }}
           K: ${{ secrets.XSERVER_SSH_KEY }}
-          D: ${{ secrets.XSERVER_DIR }}
           P: ${{ secrets.XSERVER_SSH_PASSPHRASE }}
         run: |
           mkdir -p ~/.ssh
-          printf '%s\n' "$K" > ~/.ssh/xserver
+          printf '%s\n' "$K" | tr -d '\r' > ~/.ssh/xserver
           chmod 600 ~/.ssh/xserver
           if [ -n "$P" ]; then
             ssh-keygen -p -P "$P" -N "" -f ~/.ssh/xserver >/dev/null
           fi
-          ssh-keyscan -p 10022 "$H" >> ~/.ssh/known_hosts 2>/dev/null
+          ssh-keyscan -p 10022 "$XSERVER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: 送り先のフォルダを確認
+        if: steps.check.outputs.ready == 'true'
+        run: |
+          ssh -p 10022 -i ~/.ssh/xserver "$XSERVER_USER@$XSERVER_HOST" \
+            "test -f '$XSERVER_DIR/index.html' && echo OK: $XSERVER_DIR || { echo 'NG: 送り先にindex.htmlがありません'; ls -la ~/nigihayahi03.com/public_html | head -50; exit 1; }"
+
+      - name: エックスサーバーへ送る(変わったファイルだけ)
+        if: steps.check.outputs.ready == 'true'
+        run: |
           rsync -rlz --checksum --info=stats2 \
             --exclude='.git/' --exclude='.github/' \
             --exclude='CLAUDE.md' --exclude='README.md' \
             -e "ssh -p 10022 -i ~/.ssh/xserver" \
-            ./ "$U@$H:$D/"
-          rm -f ~/.ssh/xserver
+            ./ "$XSERVER_USER@$XSERVER_HOST:$XSERVER_DIR/"
+
+      - name: 後片づけ
+        if: always()
+        run: rm -f ~/.ssh/xserver
