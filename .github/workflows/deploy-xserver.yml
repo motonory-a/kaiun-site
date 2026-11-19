@@ -15,7 +15,7 @@ concurrency:
 env:
   XSERVER_HOST: sv12649.xserver.jp
   XSERVER_USER: nigihayahi03
-  XSERVER_DIR: nigihayahi03.com/public_html/kaiun
+  XSERVER_DIR: nigihayahi03.com/public_html/kaiun.nigihayahi03.com
 
 jobs:
   deploy:
