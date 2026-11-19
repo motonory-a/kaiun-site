@@ -4,6 +4,7 @@
 #   XSERVER_USER    … サーバーID
 #   XSERVER_SSH_KEY … エックスサーバーで作ったSSHの秘密鍵(中身をそのまま貼る)
 #   XSERVER_DIR     … 公開フォルダ(例: nigihayahi03.com/public_html/kaiun)
+#   XSERVER_SSH_PASSPHRASE … 鍵を作るときに決めたパスフレーズ
 name: エックスサーバーへ反映
 
 on:
@@ -48,10 +49,14 @@ jobs:
           U: ${{ secrets.XSERVER_USER }}
           K: ${{ secrets.XSERVER_SSH_KEY }}
           D: ${{ secrets.XSERVER_DIR }}
+          P: ${{ secrets.XSERVER_SSH_PASSPHRASE }}
         run: |
           mkdir -p ~/.ssh
           printf '%s\n' "$K" > ~/.ssh/xserver
           chmod 600 ~/.ssh/xserver
+          if [ -n "$P" ]; then
+            ssh-keygen -p -P "$P" -N "" -f ~/.ssh/xserver >/dev/null
+          fi
           ssh-keyscan -p 10022 "$H" >> ~/.ssh/known_hosts 2>/dev/null
           rsync -rlz --checksum --info=stats2 \
             --exclude='.git/' --exclude='.github/' \
