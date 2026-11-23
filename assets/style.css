@@ -1,48 +1,678 @@
+/* 開運の町ランキングリサーチ | CSS-only redesign | 2026-11-23 */
+/* 既存HTML・Leafletのクラス名、IDを維持。外部フォント・画像は追加しない。 */
 
-:root{--bg:#fbf8f1;--ink:#2b2420;--sub:#6f645b;--gold:#a87908;--red:#b22d2d;--card:#fff;--line:#eadfcd}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hiragino Sans","Noto Sans JP","Yu Gothic",sans-serif;line-height:1.7}
-a{color:#8a2a1e}.wrap{max-width:820px;margin:0 auto;padding:0 16px 48px}
-.top{background:#2b2420;color:#fff}.top .in{max-width:820px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.top a{color:#fff;text-decoration:none}.logo{font-weight:700;font-size:17px}.nav{margin-left:auto;display:flex;gap:14px;font-size:13px}
-h1{font-size:23px;margin:22px 0 6px;line-height:1.4}h2{font-size:18px;margin:26px 0 8px;border-left:4px solid var(--red);padding-left:8px}
-.lead{color:var(--sub);font-size:14.5px}.crumb{font-size:12px;color:var(--sub);margin-top:12px}.crumb a{color:var(--sub)}
-.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:14px 0}
-.share{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:10px 0 4px}.share span{font-size:13px;color:var(--sub);margin-right:2px}.share a,.share button{font:inherit;font-size:14px;font-weight:700;padding:7px 14px;border-radius:999px;border:0;color:#fff;text-decoration:none;cursor:pointer}.share .sx{background:#111}.share .sl{background:#06c755}.share .sf{background:#1877f2}.share .sc{background:#8a6d3b}.txbox{margin:18px 0}.txbox h2{margin-bottom:4px}.txt{width:100%;border-collapse:collapse;background:#fff;border:1px solid #eadfcb;border-radius:12px;overflow:hidden;margin:8px 0}.txt th,.txt td{padding:10px 12px;border-bottom:1px solid #f1e8d8;text-align:left;font-size:15px}.txt th{width:30%;color:var(--sub);font-weight:600}.txt td:last-child{text-align:right;color:var(--sub);font-size:13px;width:18%}.credit{font-size:11.5px;color:var(--sub);line-height:1.6}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0;display:block;color:inherit;text-decoration:none}
-.row{display:flex;align-items:center;gap:10px}.rank{font-weight:700;color:var(--gold);min-width:3em;font-size:14px;line-height:1.2}.rank small{display:block;font-weight:400;color:var(--sub);font-size:10.5px}
-.name{font-weight:700;font-size:17px;flex:1;line-height:1.3}.name small{display:block;font-weight:400;font-size:12px;color:var(--sub)}
-.score{font-weight:700;font-size:21px;color:var(--red)}.score small{font-size:11px;color:var(--sub);font-weight:400}
-.big{font-size:44px;font-weight:700;color:var(--red);line-height:1}.big small{font-size:15px;color:var(--sub)}
-.bar{height:7px;background:#f1e9da;border-radius:4px;margin:8px 0 6px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,#e0b84a,#b22d2d)}
-.badges{display:flex;flex-wrap:wrap;gap:6px;font-size:12.5px}.badges span{background:#f7f0e2;border-radius:999px;padding:2px 9px}.badges .luck{background:#fde8e8;color:var(--red)}
-table.bd{width:100%;border-collapse:collapse;font-size:14px}table.bd td{border-bottom:1px solid var(--line);padding:7px 4px}table.bd td.n{text-align:right;font-weight:700;white-space:nowrap}
-.btn{display:inline-block;background:var(--red);color:#fff;text-decoration:none;padding:11px 20px;border-radius:10px;font-weight:700;margin:4px 0}
-.btn.sub{background:#fff;color:var(--red);border:1px solid var(--red)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}.grid a{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;text-decoration:none;color:inherit;font-size:14px}
-.ad{border:1px dashed #ccbfa8;border-radius:10px;padding:18px;text-align:center;color:#a39684;font-size:12px;margin:16px 0}
-footer{font-size:12px;color:var(--sub);margin-top:30px;border-top:1px solid var(--line);padding-top:12px}footer a{color:var(--sub)}
-input,select,textarea{font-size:16px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#fff;width:100%;font-family:inherit}
-label{display:block;font-weight:700;margin:14px 0 4px;font-size:14px}.hint{font-weight:400;color:var(--sub);font-size:12px}
-.checks label{display:inline-block;font-weight:400;margin:4px 12px 4px 0}.checks input{width:auto}
-#tip{position:fixed;pointer-events:none;background:#2b2420;color:#fff;font-size:12px;padding:4px 8px;border-radius:6px;display:none;z-index:9}
-.map svg{width:100%;height:auto;display:block}
+/* 01. 基本色・タイポグラフィ */
+:root {
+  --bg: #f8f6f0;
+  --ink: #292823;
+  --sub: #665e52;
+  --gold: #8b6729;
+  --red: #a7352d;
+  --card: #fffefa;
+  --line: #e6dece;
+  --gold-soft: #f5eddb;
+  --red-soft: #fbefec;
+  --shadow: 0 4px 18px rgba(49, 38, 21, .055);
+}
 
-body{overflow-x:hidden}
-.hero{position:relative;width:100vw;margin-left:calc(50% - 50vw)}.hero img{display:block;width:100%;height:auto;aspect-ratio:2/1;object-fit:cover;object-position:35% 40%}
-@media(min-width:900px){.hero img{aspect-ratio:8/3}}
-.hero-t{position:absolute;top:5%;right:3%;max-width:48%;text-align:right;color:#2b2420;text-shadow:0 0 4px #fff,0 0 10px #fff,0 0 16px #fff}
-.hero-t b{display:block;font-size:clamp(20px,5vw,44px);letter-spacing:.04em;line-height:1.2}.hero-t h1{font-size:clamp(12px,2.7vw,24px);margin:4px 0 8px;line-height:1.4}
-.hero-t a{display:inline-block;background:var(--red);color:#fff;text-shadow:none;border-radius:999px;padding:5px 14px;font-size:clamp(12px,2.4vw,16px);text-decoration:none;font-weight:700}
-.toplead{margin:12px 0 10px}.toplead .lead{margin:0 0 4px;font-size:15px;line-height:1.7}.toplead .note{margin:0;font-size:12px;color:var(--sub)}
-.mapfull{position:relative;width:100vw;margin:0 0 18px calc(50% - 50vw);height:72svh;min-height:400px;max-height:760px}
-#kmap{position:absolute;inset:0;background:#e8e4da}
-.kq{position:absolute;top:10px;left:10px;right:10px;max-width:520px;z-index:1000}.kq input{width:100%;box-sizing:border-box;padding:11px 14px;font-size:16px;border:1px solid #ccc;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.2);background:#fff}
-.sg{position:absolute;left:0;right:0;top:100%;background:#fff;border:1px solid var(--line);box-shadow:0 6px 16px rgba(0,0,0,.15);border-radius:0 0 8px 8px;overflow:hidden}.sg:empty{display:none}
-.sg button{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:#fff;padding:10px 14px;font-size:15px;cursor:pointer}.sg button small{color:var(--red);margin-left:6px}
-.kctl{position:absolute;top:62px;left:10px;z-index:999;display:flex;gap:6px}.kctl select{padding:8px;border-radius:8px;border:1px solid #ccc;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);font-size:14px}.kctl button{width:40px;border-radius:8px;border:1px solid #ccc;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.15);font-size:18px;cursor:pointer}
-.klg{position:absolute;left:10px;bottom:24px;z-index:999;background:rgba(255,255,255,.93);border-radius:8px;padding:6px 10px;font-size:12px;line-height:1.8;box-shadow:0 2px 6px rgba(0,0,0,.15);max-width:70%}.klg span{display:inline-block;width:11px;height:11px;border-radius:50%;vertical-align:-1px;margin-left:4px}.klg .p0{background:#d9a514;box-shadow:0 0 0 2px #fff4c7}.klg .p1{background:#b22d2d}.klg .p2{background:#b58a6e}.kgold svg{filter:drop-shadow(0 0 3px rgba(255,200,40,.9))}.klg .p3{background:#d9b98a}.klg small{color:var(--sub)}
-#kmap .leaflet-tile-pane{filter:grayscale(.6) saturate(.9) brightness(1.04) contrast(.95)}
-.kpin{background:none;border:0}.kpin svg{filter:drop-shadow(0 1px 2px rgba(0,0,0,.35))}
-.pp-t{font-size:16px;font-weight:700;line-height:1.35;border-bottom:2px solid var(--red);padding-bottom:4px;margin-bottom:6px}.pp-tb th{text-align:left;font-weight:400;color:var(--sub);padding-right:8px;white-space:nowrap}.pp-tb b{font-size:20px;color:var(--red)}.pp-h{font-size:12px;color:var(--sub);margin-top:6px}.pp .badges{margin:4px 0 8px}.pp-l a{display:block;padding:4px 0;font-size:14px}
-.leaflet-container{font-family:inherit}
-.leaflet-tooltip.tl{background:rgba(43,36,32,.85);color:#fff;border:0;font-size:12px;padding:2px 6px;box-shadow:none}.leaflet-tooltip.tl:before{display:none}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+}
+a { color: #8d332a; text-underline-offset: .2em; }
+a:hover { color: var(--red); }
+p { overflow-wrap: break-word; }
+button, input, select, textarea { font-family: inherit; }
+a:focus-visible, button:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: 3px solid #d6a652;
+  outline-offset: 2px;
+}
+::selection { background: #f1dbac; color: #27231e; }
+
+/* 02. ヘッダー・共通の本文幅 */
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 22px 56px; }
+.top {
+  background: #282a25;
+  color: #fff;
+  border-bottom: 3px solid #ac884a;
+}
+.top .in {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 13px 22px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+}
+.top a { color: #fff; text-decoration: none; }
+.logo {
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: .025em;
+}
+.nav {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+}
+.nav a {
+  padding: 5px 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color .18s ease;
+}
+.nav a:hover, .nav a:focus-visible { color: #fff; border-color: #d9b46d; }
+
+/* 03. 見出し・説明・パンくず */
+h1 {
+  margin: 28px 0 12px;
+  font-size: clamp(23px, 3.5vw, 30px);
+  font-weight: 800;
+  line-height: 1.42;
+  letter-spacing: .025em;
+  overflow-wrap: anywhere;
+}
+h2 {
+  margin: 34px 0 13px;
+  padding: 3px 0 3px 13px;
+  border-left: 4px solid var(--red);
+  font-size: clamp(18px, 2.4vw, 22px);
+  font-weight: 800;
+  line-height: 1.48;
+  letter-spacing: .015em;
+}
+.lead { color: var(--sub); font-size: 15.5px; line-height: 1.85; }
+.crumb {
+  margin-top: 17px;
+  color: var(--sub);
+  font-size: 12.5px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.crumb a { color: #705a42; }
+.crumb a:hover { color: var(--red); }
+.hint { color: var(--sub); font-size: 12.5px; font-weight: 400; }
+.credit { color: var(--sub); font-size: 12px; line-height: 1.8; }
+
+/* 04. 白い情報ボックス・ランキングカード */
+.box {
+  margin: 17px 0;
+  padding: 20px 22px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  box-shadow: var(--shadow);
+}
+.box > :last-child { margin-bottom: 0; }
+.card {
+  display: block;
+  margin: 12px 0;
+  padding: 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.card:hover { color: inherit; }
+.row { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.rank {
+  flex: 0 0 auto;
+  min-width: 3.3em;
+  color: var(--gold);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+.rank small {
+  display: block;
+  margin-top: 3px;
+  color: var(--sub);
+  font-size: 10.5px;
+  font-weight: 400;
+  white-space: normal;
+}
+.name {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.name small {
+  display: block;
+  margin-bottom: 2px;
+  color: var(--sub);
+  font-size: 12px;
+  font-weight: 400;
+}
+.score {
+  flex: 0 0 auto;
+  margin-left: auto;
+  color: var(--red);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.25;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.score small { color: var(--sub); font-size: 11px; font-weight: 400; }
+.big {
+  color: var(--red);
+  font-size: clamp(42px, 7vw, 58px);
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.big small { color: var(--sub); font-size: 14px; font-weight: 500; }
+.bar {
+  height: 8px;
+  margin: 13px 0 11px;
+  overflow: hidden;
+  background: #eee7d9;
+  border-radius: 999px;
+}
+.bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #d2a64d, #a7352d);
+  border-radius: inherit;
+}
+.badges { display: flex; flex-wrap: wrap; gap: 7px; font-size: 12.5px; line-height: 1.5; }
+.badges span {
+  padding: 4px 10px;
+  background: var(--gold-soft);
+  border: 1px solid #ece0c9;
+  border-radius: 999px;
+}
+.badges .luck { color: #922f28; background: var(--red-soft); border-color: #f1d9d4; }
+
+/* 05. 内訳表・統計表 */
+table.bd { width: 100%; border-collapse: collapse; font-size: 14px; }
+table.bd td { padding: 12px 6px; border-bottom: 1px solid var(--line); line-height: 1.6; }
+table.bd tr:last-child td { border-bottom: 0; }
+table.bd td.n { color: var(--ink); font-weight: 800; text-align: right; white-space: nowrap; }
+.txbox { margin: 22px 0; }
+.txbox h2 { margin-bottom: 8px; }
+.txt {
+  width: 100%;
+  margin: 10px 0;
+  border: 1px solid var(--line);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  background: var(--card);
+  overflow: hidden;
+}
+.txt th, .txt td {
+  padding: 12px 13px;
+  border-bottom: 1px solid #eee7dc;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.txt tr:last-child th, .txt tr:last-child td { border-bottom: 0; }
+.txt th { width: 30%; color: var(--sub); font-weight: 700; }
+.txt td:last-child { width: 18%; color: var(--sub); font-size: 12.5px; text-align: right; }
+
+/* 06. ボタン・一覧・入力フォーム */
+.btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin: 5px 0;
+  padding: 10px 19px;
+  border: 1px solid var(--red);
+  border-radius: 10px;
+  background: var(--red);
+  box-shadow: 0 3px 9px rgba(137, 48, 37, .12);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .18s ease, box-shadow .18s ease;
+}
+.btn:hover { background: #862920; color: #fff; box-shadow: 0 5px 13px rgba(137, 48, 37, .16); }
+.btn.sub { background: #fffefa; border-color: var(--red); box-shadow: none; color: var(--red); }
+.btn.sub:hover { background: var(--red-soft); color: #852b24; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr));
+  gap: 11px;
+}
+.grid a {
+  display: block;
+  padding: 13px 14px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  box-shadow: 0 2px 9px rgba(49, 38, 21, .035);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.6;
+  text-decoration: none;
+}
+.grid a:hover { border-color: #d4b785; color: #7c3028; }
+input, select, textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid #cec3b2;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+input::placeholder, textarea::placeholder { color: #827a70; opacity: 1; }
+input[type="checkbox"], input[type="radio"] {
+  width: auto;
+  min-height: 0;
+  padding: 0;
+  accent-color: var(--red);
+}
+label { display: block; margin: 16px 0 5px; font-size: 14px; font-weight: 800; }
+.checks label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 6px 13px 6px 0;
+  font-weight: 400;
+  cursor: pointer;
+}
+.checks input { width: auto; }
+.ad {
+  margin: 21px 0;
+  padding: 20px;
+  border: 1px dashed #cabca6;
+  border-radius: 12px;
+  color: #807669;
+  font-size: 12px;
+  text-align: center;
+}
+footer {
+  margin-top: 44px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  color: var(--sub);
+  font-size: 12px;
+  line-height: 1.9;
+}
+footer a { color: #706153; }
+
+/* 07. SNS共有 */
+.share { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 10px; }
+.share span { margin-right: 5px; color: var(--sub); font-size: 12.5px; }
+.share a, .share button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 15px;
+  border: 0;
+  border-radius: 999px;
+  color: #fff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+  text-decoration: none;
+  cursor: pointer;
+}
+.share .sx { background: #242424; }
+.share .sl { background: #06a945; }
+.share .sf { background: #2464bc; }
+.share .sc { background: #786040; }
+.share a:hover, .share button:hover { color: #fff; filter: brightness(.93); }
+
+/* 08. トップ写真：元画像そのまま。文字部分だけを整える */
+.hero { position: relative; width: 100vw; margin-left: calc(50% - 50vw); }
+.hero picture { display: block; }
+.hero img {
+  display: block;
+  width: 100%;
+  height: 50vw; /* 900px未満は2:1を固定 */
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  object-position: 35% 40%;
+}
+.hero-t {
+  position: absolute;
+  top: 5%;
+  right: 3%;
+  width: auto;
+  max-width: 48%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: #2b2420;
+  text-align: right;
+  text-shadow:
+    -1px -1px 3px #fff, 1px -1px 3px #fff,
+    -1px 1px 3px #fff, 1px 1px 3px #fff,
+    0 0 8px #fff, 0 0 15px #fff;
+}
+.hero-t b {
+  display: block;
+  font-size: clamp(18px, 2.8vw, 40px);
+  font-weight: 800;
+  letter-spacing: .025em;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.hero-t h1 {
+  margin: 5px 0 0;
+  font-size: clamp(12px, 1.8vw, 22px);
+  font-weight: 800;
+  letter-spacing: .01em;
+  line-height: 1.45;
+}
+.hero-t a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 7px 17px;
+  border-radius: 999px;
+  background: var(--red);
+  color: #fff;
+  font-size: clamp(12px, 1.7vw, 15px);
+  font-weight: 800;
+  text-decoration: none;
+  text-shadow: none;
+}
+.hero-t a:hover { background: #862920; color: #fff; }
+.toplead { margin: 21px 0 23px; padding-left: 16px; border-left: 3px solid #c1a16b; }
+.toplead .lead { margin: 0 0 8px; color: var(--ink); font-size: 15.5px; line-height: 1.85; }
+.toplead .note { margin: 0; color: var(--sub); font-size: 12.5px; line-height: 1.75; }
+
+/* 09. 地図：既存のposition/z-index階層を維持 */
+.mapfull {
+  position: relative;
+  width: 100vw;
+  height: 72svh;
+  min-height: 400px;
+  max-height: 760px;
+  margin: 0 0 22px calc(50% - 50vw);
+  background: #e8e4da;
+}
+#kmap { position: absolute; inset: 0; background: #e8e4da; }
+.kq {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  max-width: 520px;
+  z-index: 1000;
+}
+.kq input {
+  width: 100%;
+  min-height: 48px;
+  padding: 11px 42px 11px 43px;
+  border: 1px solid #d2c6b2;
+  border-radius: 11px;
+  background: #fff;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, .18);
+  font-size: 16px;
+}
+/* 検索アイコンはCSSのみで描画 */
+.kq::before {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 13px;
+  height: 13px;
+  border: 2px solid #847055;
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+  z-index: 1;
+}
+.kq::after {
+  position: absolute;
+  top: 32px;
+  left: 30px;
+  width: 8px;
+  height: 2px;
+  border-radius: 2px;
+  background: #847055;
+  content: "";
+  transform: rotate(45deg);
+  transform-origin: left center;
+  pointer-events: none;
+  z-index: 1;
+}
+.sg {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: min(45svh, 320px);
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 0 0 11px 11px;
+  box-shadow: 0 7px 18px rgba(0, 0, 0, .16);
+}
+.sg:empty { display: none; }
+.sg button {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+.sg button:last-child { border-bottom: 0; }
+.sg button:hover, .sg button:focus-visible { background: #f7f1e5; }
+.sg button small { margin-left: 6px; color: var(--red); }
+.kctl {
+  position: absolute;
+  top: 66px;
+  left: 10px;
+  z-index: 999;
+  display: flex;
+  gap: 7px;
+  max-width: calc(100% - 20px);
+}
+.kctl select {
+  flex: 0 1 auto;
+  width: auto;
+  min-width: 0;
+  max-width: 210px;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid #d2c6b2;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, .14);
+  font-size: 14px;
+  cursor: pointer;
+}
+.kctl button {
+  flex: 0 0 42px;
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  border: 1px solid #d2c6b2;
+  border-radius: 9px;
+  background: #fff;
+  box-shadow: 0 2px 9px rgba(0, 0, 0, .14);
+  font-size: 19px;
+  cursor: pointer;
+}
+.klg {
+  position: absolute;
+  bottom: 24px;
+  left: 10px;
+  z-index: 999;
+  max-width: 75%;
+  padding: 8px 12px;
+  border: 1px solid rgba(214, 201, 181, .8);
+  border-radius: 10px;
+  background: rgba(255, 254, 250, .95);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .14);
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.75;
+}
+.klg span { display: inline-block; width: 11px; height: 11px; margin-left: 4px; border-radius: 50%; vertical-align: -1px; }
+.klg .p0 { background: #d9a514; box-shadow: 0 0 0 2px #fff4c7; }
+.klg .p1 { background: #b22d2d; }
+.klg .p2 { background: #b58a6e; }
+.klg .p3 { background: #d9b98a; }
+.klg small { color: var(--sub); }
+#kmap .leaflet-tile-pane { filter: grayscale(.6) saturate(.9) brightness(1.04) contrast(.95); }
+.kgold svg { filter: drop-shadow(0 0 3px rgba(255, 200, 40, .9)); }
+.kpin { background: none; border: 0; }
+.kpin svg { filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .35)); }
+.leaflet-container { font-family: inherit; }
+.leaflet-tooltip.tl {
+  padding: 2px 6px;
+  border: 0;
+  background: rgba(43, 36, 32, .85);
+  box-shadow: none;
+  color: #fff;
+  font-size: 12px;
+}
+.leaflet-tooltip.tl:before { display: none; }
+.pp-t { margin-bottom: 7px; padding-bottom: 5px; border-bottom: 2px solid var(--red); font-size: 16px; font-weight: 800; line-height: 1.4; }
+.pp-tb th { padding-right: 8px; color: var(--sub); font-weight: 400; text-align: left; white-space: nowrap; }
+.pp-tb b { color: var(--red); font-size: 21px; }
+.pp-h { margin-top: 7px; color: var(--sub); font-size: 12px; }
+.pp .badges { margin: 6px 0 9px; }
+.pp-l a { display: block; padding: 5px 0; font-size: 14px; }
+#tip {
+  position: fixed;
+  z-index: 9;
+  display: none;
+  padding: 5px 9px;
+  border-radius: 7px;
+  background: #2b2420;
+  color: #fff;
+  font-size: 12px;
+  pointer-events: none;
+}
+.map svg { display: block; width: 100%; height: auto; }
+
+/* 10. パソコン */
+@media (min-width: 900px) {
+  .hero img { height: 37.5vw; aspect-ratio: 8 / 3; }
+}
+@media (hover: hover) and (pointer: fine) {
+  .card:hover { border-color: #d1b37f; box-shadow: 0 8px 22px rgba(49, 38, 21, .095); transform: translateY(-1px); }
+}
+
+/* 11. スマートフォン優先の調整 */
+@media (max-width: 720px) {
+  .wrap { padding: 0 16px 48px; }
+  .top .in { padding: 11px 16px 9px; gap: 5px; }
+  .logo { font-size: 16px; }
+  .nav {
+    flex-basis: 100%;
+    width: 100%;
+    margin-left: auto;
+    justify-content: flex-end;
+    gap: 3px 12px;
+    font-size: 12.5px;
+  }
+  .nav a { padding: 6px 0; white-space: nowrap; }
+  h1 { margin-top: 22px; font-size: 23px; }
+  h2 { margin-top: 29px; padding-left: 11px; font-size: 19px; }
+  .lead { font-size: 14.5px; }
+  .box { padding: 16px; border-radius: 13px; }
+  .card { padding: 14px 13px; border-radius: 12px; }
+  .row { gap: 9px; }
+  .rank { min-width: 3em; font-size: 12.5px; }
+  .rank small { font-size: 10px; }
+  .name { font-size: 16px; }
+  .name small { font-size: 11.5px; }
+  .score { font-size: 22px; }
+  .big { font-size: 44px; }
+  .badges { gap: 6px; font-size: 12px; }
+  .badges span { padding: 4px 8px; }
+  table.bd { font-size: 13.5px; }
+  table.bd td { padding: 10px 4px; }
+  .txt th, .txt td { padding: 10px 8px; font-size: 13px; }
+  .txt td:last-child { font-size: 11.5px; }
+  .hero-t {
+    top: 5%;
+    right: 3%;
+    width: 56%;
+    max-width: none;
+    padding: 0;
+  }
+  /* HTMLを変えず、スマホだけ見出しを意図した2行で表示 */
+  .hero-t b { font-size: 0; line-height: 0; letter-spacing: 0; }
+  .hero-t b::before, .hero-t b::after {
+    display: block;
+    font-size: clamp(16px, 5vw, 29px);
+    font-weight: 800;
+    line-height: 1.27;
+    letter-spacing: .01em;
+    white-space: nowrap;
+  }
+  .hero-t b::before { content: "開運の町"; }
+  .hero-t b::after { content: "ランキングリサーチ"; }
+  .hero-t h1 { margin-top: 5px; font-size: clamp(11px, 3.1vw, 14px); }
+  .hero-t a { margin-top: 6px; padding: 5px 11px; font-size: 12px; }
+  .toplead { margin: 17px 0 18px; padding-left: 11px; }
+  .toplead .lead { font-size: 14px; line-height: 1.85; }
+  .toplead .note { font-size: 12px; }
+  .mapfull { height: 68svh; min-height: 430px; max-height: 690px; }
+  .kctl { right: 10px; }
+  .kctl select { flex: 1 1 0; width: 0; max-width: none; font-size: 13px; }
+  .kctl button { flex-basis: 42px; }
+  .klg { max-width: calc(100% - 20px); font-size: 11px; }
+}
+
+@media (max-width: 360px) {
+  .logo { font-size: 15px; }
+  .nav { font-size: 11.5px; gap: 2px 6px; }
+  .hero-t { width: 58%; }
+  .hero-t h1 { font-size: 11px; }
+  .box { padding: 14px 12px; }
+  .rank { min-width: 2.7em; font-size: 12px; }
+  .name { font-size: 15px; }
+  .score { font-size: 20px; }
+  .score small { font-size: 10px; }
+  .big { font-size: 40px; }
+  .share { gap: 6px; }
+  .share a, .share button { padding: 8px 11px; font-size: 12px; }
+  .kctl { gap: 5px; }
+  .kctl select { padding: 7px 6px; font-size: 12px; }
+  .kctl button { flex-basis: 40px; width: 40px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .nav a, .card, .btn { transition: none; }
+  .card:hover { transform: none; }
+}
